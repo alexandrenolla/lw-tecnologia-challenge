@@ -1,0 +1,115 @@
+### Variables
+@baseUrl = http://localhost:3001
+@token = your-token-here
+
+### Login correto
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### Login incorreto (403)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "wrong"
+}
+
+### Acesso sem token (401)
+GET {{baseUrl}}/balance?account_id=100
+
+### Balance conta inexistente (404)
+GET {{baseUrl}}/balance?account_id=999
+Authorization: Bearer {{token}}
+
+### Deposit criando conta
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "deposit",
+  "destination": "100",
+  "amount": 10
+}
+
+### Deposit conta existente
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "deposit",
+  "destination": "100",
+  "amount": 10
+}
+
+### Balance conta existente
+GET {{baseUrl}}/balance?account_id=100
+Authorization: Bearer {{token}}
+
+### Withdraw com saldo
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "withdraw",
+  "origin": "100",
+  "amount": 5
+}
+
+### Withdraw sem saldo (400)
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "withdraw",
+  "origin": "100",
+  "amount": 1000
+}
+
+### Deposit para conta destino
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "deposit",
+  "destination": "300",
+  "amount": 0
+}
+
+### Transfer completa
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "transfer",
+  "origin": "100",
+  "destination": "300",
+  "amount": 15
+}
+
+### Transfer origem inexistente (404)
+POST {{baseUrl}}/event
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "type": "transfer",
+  "origin": "999",
+  "destination": "300",
+  "amount": 10
+}
+
+### Reset
+POST {{baseUrl}}/reset
+Authorization: Bearer {{token}}
