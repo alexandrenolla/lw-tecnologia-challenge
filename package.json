@@ -1,0 +1,29 @@
+{
+  "name": "bank-api-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API Bancária - Desafio Técnico",
+  "workspaces": [
+    "apps/*",
+    "types"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "clean": "rm -rf node_modules apps/*/node_modules apps/*/dist types/node_modules types/dist"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=10.0.0"
+  }
+}
