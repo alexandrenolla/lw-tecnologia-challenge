@@ -67,7 +67,7 @@ docker-compose up
 | -------- | ------------------------------ |
 | Frontend | http://localhost:3000          |
 | API      | http://localhost:3001          |
-| Swagger  | http://localhost:3001/api-docs |
+| Swagger  | http://localhost:3001/bank-api/docs |
 
 ### Credenciais Padrao
 
