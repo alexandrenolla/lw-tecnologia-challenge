@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  postgresql:
+    container_name: "db-bank-api"
+    hostname: "host-db-bank"
+    image: postgres:latest
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+    ports:
+      - 5432:5432
+    networks:
+      - bank-network
+
+  node:
+    container_name: "api-bank-api"
+    hostname: "host-api-bank"
+    build: ./apps/api
+    entrypoint: sh -c "npm install && npm run start:dev"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - PGDATA=/data/db
+      - PGTZ=GMT
+      - POSTGRES_USER=${TYPEORM_USERNAME}
+      - POSTGRES_PASSWORD=${TYPEORM_PASSWORD}
+      - POSTGRES_DB=${TYPEORM_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+    volumes:
+      - ./apps/api:/home/node/app
+    depends_on:
+      - postgresql
+    ports:
+      - 3001:3001
+    networks:
+      - bank-network
+
+  web:
+    container_name: "web-bank-api"
+    hostname: "host-web-bank"
+    build: ./apps/web
+    entrypoint: sh -c "npm install && npm run dev"
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+    volumes:
+      - ./apps/web:/home/node/app
+    depends_on:
+      - node
+    ports:
+      - 3000:3000
+    networks:
+      - bank-network
+
+networks:
+  bank-network:
+    driver: bridge
