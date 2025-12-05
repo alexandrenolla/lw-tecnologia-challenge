@@ -1,8 +1,9 @@
-import { FormEvent, useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useAuth } from "../contexts/AuthContext";
 import api from "../services/api";
-import { BalanceResponse, EventRequest, EventResponse } from "../types/types";
+import type { BalanceResponse, EventRequest, EventResponse } from "../types/types";
 import "./Dashboard.css";
 
 export function Dashboard() {
@@ -16,13 +17,7 @@ export function Dashboard() {
 
   const { logout } = useAuth();
 
-  useEffect(() => {
-    if (accountId) {
-      loadBalance();
-    }
-  }, [accountId]);
-
-  async function loadBalance(): Promise<void> {
+  const loadBalance = useCallback(async (): Promise<void> => {
     try {
       const response = await api.get<BalanceResponse>(`/balance?account_id=${accountId}`);
       setBalance(response.data.balance);
@@ -34,7 +29,13 @@ export function Dashboard() {
         }
       }
     }
-  }
+  }, [accountId]);
+
+  useEffect(() => {
+    if (accountId) {
+      loadBalance();
+    }
+  }, [accountId, loadBalance]);
 
   async function handleOperation(type: "deposit" | "withdraw" | "transfer"): Promise<void> {
     setMessage("");
@@ -208,10 +209,7 @@ export function Dashboard() {
                   disabled={loading}
                 />
               </div>
-              <button
-                type="submit"
-                disabled={loading || !amount || !destinationId || !accountId}
-              >
+              <button type="submit" disabled={loading || !amount || !destinationId || !accountId}>
                 {loading ? "Processando..." : "Transferir"}
               </button>
             </form>

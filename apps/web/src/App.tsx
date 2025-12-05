@@ -1,16 +1,17 @@
+import type { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 
-function PrivateRoute({ children }: { children: JSX.Element }) {
+function PrivateRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
 
   return isAuthenticated ? children : <Navigate to="/" />;
 }
 
-function PublicRoute({ children }: { children: JSX.Element }) {
+function PublicRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
 
   return !isAuthenticated ? children : <Navigate to="/dashboard" />;

@@ -10,12 +10,9 @@ export class AppError extends Error {
   }
 }
 
-export function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
+// Express error handlers require 4 parameters to be recognized
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
   if (err instanceof AppError) {
     res.status(err.statusCode).json({ error: err.message });
     return;
@@ -25,11 +22,7 @@ export function errorHandler(
   res.status(500).json({ error: "Internal server error" });
 }
 
-type AsyncRequestHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => Promise<void>;
+type AsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<void>;
 
 export function asyncHandler(fn: AsyncRequestHandler) {
   return (req: Request, res: Response, next: NextFunction): void => {

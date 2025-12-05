@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState } from "react";
 
 import api from "../services/api";
-import { LoginResponse } from "../types/types";
+import type { LoginResponse } from "../types/types";
 
 interface AuthContextData {
   token: string | null;
@@ -13,15 +14,9 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("token");
+  });
 
   async function login(username: string, password: string): Promise<void> {
     const response = await api.post<LoginResponse>("/login", {

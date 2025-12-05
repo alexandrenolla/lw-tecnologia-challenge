@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/bank-api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(routes);
 
@@ -32,7 +32,7 @@ async function startServer(): Promise<void> {
     app.listen(env.PORT, () => {
       console.log(`Server running on port ${env.PORT}`);
       console.log(`Environment: ${env.NODE_ENV}`);
-      console.log(`Swagger docs available at http://localhost:${env.PORT}/api-docs`);
+      console.log(`Swagger docs available at http://localhost:${env.PORT}/bank-api/docs`);
     });
   } catch (error) {
     console.error("Failed to start server:", error);

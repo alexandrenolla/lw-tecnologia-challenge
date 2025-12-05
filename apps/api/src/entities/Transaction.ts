@@ -20,10 +20,10 @@ export class Transaction {
   @Column("decimal", { precision: 10, scale: 2 })
   amount!: number;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   originAccountId!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   destinationAccountId!: string | null;
 
   @CreateDateColumn()
